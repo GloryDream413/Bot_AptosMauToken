@@ -11,12 +11,13 @@ dotenv.config()
 const token = process.env.TELEGRAM_BOT_TOKEN
 const bot = new TelegramBot(token, { polling: true })
 const gifPath = './MauAptos.mp4';
-let chatId = '';
+let chatId = '-1001878116163';
 let nPrevSequenceNumber = -1;
 let bBotStart = false;
 
 bot.onText(/\/mau/, (msg) => {
   chatId = msg.chat.id;
+  console.log("ChatId", chatId);
 });
 
 const ExecuteFunction = async () => {
