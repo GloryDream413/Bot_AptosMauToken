@@ -2,7 +2,6 @@ import { createRequire } from 'module'
 const require = createRequire(import.meta.url)
 const TelegramBot = require('node-telegram-bot-api')
 const dotenv = require('dotenv')
-const fs = require('fs');
 const axios = require("axios");
 
 import fetch from "cross-fetch";
@@ -13,15 +12,15 @@ const bot = new TelegramBot(token, { polling: true })
 const gifPath = './MauAptos.mp4';
 let chatId = '-1001878116163';
 let nPrevSequenceNumber = -1;
-let bBotStart = false;
 
+const sleep = ms => new Promise(r => setTimeout(r, ms))
 // bot.onText(/\/mau/, (msg) => {
 //   chatId = msg.chat.id;
 //   console.log("ChatId", chatId);
 // });
 
 const ExecuteFunction = async () => {
-  const url = "https://fullnode.mainnet.aptoslabs.com/v1/accounts/0x2ad8f7e64c7bffcfe94d7dea84c79380942c30e13f1b12c7a89e98df91d0599b/events/0x2ad8f7e64c7bffcfe94d7dea84c79380942c30e13f1b12c7a89e98df91d0599b::swap::PairEventHolder%3C0x1::aptos_coin::AptosCoin,0xf8fa55ff4265fa9586f74d00da4858b8a0d2320bbe94cb0e91bf3a40773eb60::MAU::MAU%3E/swap?limit=100";
+  const url = "https://fullnode.mainnet.aptoslabs.com/v1/accounts/0x2ad8f7e64c7bffcfe94d7dea84c79380942c30e13f1b12c7a89e98df91d0599b/events/0x2ad8f7e64c7bffcfe94d7dea84c79380942c30e13f1b12c7a89e98df91d0599b::swap::PairEventHolder%3C0x1::aptos_coin::AptosCoin,0xf8fa55ff4265fa9586f74d00da4858b8a0d2320bbe94cb0e91bf3a40773eb60::MAU::MAU%3E/swap?limit=5";
   let event_data_res = await fetch(url);
   let event_data = await event_data_res.json();
 
@@ -101,16 +100,11 @@ const ExecuteFunction = async () => {
               "\n\n"+
               "<a href=\"" + vTransaction + "\">Tx</a>" + " | " + "<a href=\"https://www.dextools.io/app/en/aptos/pair-explorer/0x2ad8f7e64c7bffcfe94d7dea84c79380942c30e13f1b12c7a89e98df91d0599b%3C0x1::aptos_coin::AptosCoin-0xf8fa55ff4265fa9586f74d00da4858b8a0d2320bbe94cb0e91bf3a40773eb60::MAU::MAU%3E\">Chart</a>" + " | " + "<a href=\"" + vSender + "\">Buyer</a>" + " | " + "<a href=\"https://baptswap.com/swap?inputToken=0x1::aptos_coin::AptosCoin&outputToken=0xf8fa55ff4265fa9586f74d00da4858b8a0d2320bbe94cb0e91bf3a40773eb60::MAU::MAU\">Buy Now</a>";
   
-          bot.sendVideo(chatId, gifPath, {
+          await sleep(5000)
+          await bot.sendVideo(chatId, gifPath, {
             caption:msg,
             parse_mode: 'HTML'
           });
-  
-          // if(bBotStart == false)
-          // {
-          //   bBotStart = true;
-          //   break;
-          // }
         }
       }
       else
